@@ -1,6 +1,6 @@
-﻿namespace GenerateChunkDiff
+﻿namespace ScarifLib
 {
-    internal class ChunkPosition
+    public class ChunkPosition
     {
         public int X { get; }
         public int Z { get; }

@@ -1,7 +1,7 @@
 ﻿using Substrate.Core;
 using Substrate.Nbt;
 
-namespace GenerateChunkDiff
+namespace ScarifLib
 {
     public class ChunkSchematic
     {

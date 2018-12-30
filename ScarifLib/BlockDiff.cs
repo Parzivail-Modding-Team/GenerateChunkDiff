@@ -1,9 +1,9 @@
 ﻿using System;
 using Substrate.Nbt;
 
-namespace GenerateChunkDiff
+namespace ScarifLib
 {
-    internal class BlockDiff
+    public class BlockDiff
     {
         public int Id { get; }
         public BlockFlags Flags { get; }
@@ -11,7 +11,7 @@ namespace GenerateChunkDiff
         public NbtTree TileData { get; }
 
         [Flags]
-        internal enum BlockFlags
+        public enum BlockFlags
         {
             None = 0,
             HasMetadata = 0b1,

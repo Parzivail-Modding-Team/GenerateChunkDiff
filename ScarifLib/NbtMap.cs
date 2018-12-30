@@ -2,9 +2,9 @@
 using Substrate.Core;
 using Substrate.Nbt;
 
-namespace GenerateChunkDiff
+namespace ScarifLib
 {
-    internal class NbtMap : Dictionary<short, string>
+    public class NbtMap : Dictionary<short, string>
     {
         public static NbtMap Load(string filename)
         {

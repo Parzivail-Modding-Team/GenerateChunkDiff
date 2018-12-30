@@ -3,10 +3,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using Brotli;
+using Substrate.Core;
+using Substrate.Nbt;
 
-namespace GenerateChunkDiff
+namespace ScarifLib
 {
-    internal class ScarifStructure : Dictionary<ChunkPosition, List<KeyValuePair<BlockPosition, BlockDiff>>>
+    public class ScarifStructure : Dictionary<ChunkPosition, List<KeyValuePair<BlockPosition, BlockDiff>>>
     {
         public readonly int Version = 1;
 
@@ -21,13 +23,13 @@ namespace GenerateChunkDiff
                 f.Write(ident);
                 f.Write(Version);
                 f.Write(Keys.Count); // Keys = Chunks
-                f.Write(map.Keys.Count);
+                f.Write((int) map.Keys.Count);
 
                 foreach (var pair in map)
                 {
-                    f.Write(pair.Key);
+                    f.Write((short) pair.Key);
 
-                    var buffer = Encoding.UTF8.GetBytes(pair.Value);
+                    var buffer = Encoding.UTF8.GetBytes((string) pair.Value);
                     f.Write(buffer);
                     f.Write((byte)0);
                 }

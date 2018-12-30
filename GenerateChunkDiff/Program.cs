@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CommandLine;
+using ScarifLib;
 using Substrate;
 using Substrate.Nbt;
 
@@ -142,6 +143,9 @@ namespace GenerateChunkDiff
                             var teOriginal = otherChunk.Blocks.GetTileEntity(x, y, z);
                             if (teOriginal != null)
                                 nbtOriginal = new NbtTree(teOriginal.Source, "tile");
+
+                            if (!inputMap.ContainsKey(blockIdOriginal) || !outputMap.ContainsKey(blockId))
+                                continue;
 
                             if (inputMap[blockIdOriginal] == outputMap[blockId] && blockDataOriginal == blockData && nbtOriginal == nbt)
                                 continue;

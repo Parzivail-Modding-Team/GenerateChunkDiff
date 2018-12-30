@@ -1,6 +1,6 @@
-﻿namespace GenerateChunkDiff
+﻿namespace ScarifLib
 {
-    internal class BlockPosition
+    public class BlockPosition
     {
         public int X { get; }
         public int Y { get; }

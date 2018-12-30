@@ -1,9 +1,9 @@
 ﻿using System;
 using Substrate;
 
-namespace GenerateChunkDiff
+namespace ScarifLib
 {
-    internal class ChunkBounds
+    public class ChunkBounds
     {
         public int MinX { get; set; }
         public int MaxX { get; set; }
