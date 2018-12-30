@@ -65,7 +65,7 @@ namespace TranslateSchematic
             cgui.Add(lBlocksFailed);
             cgui.Add(lStatus);
 
-            var failed = new List<string>();
+            var failed = new List<int>();
 
             var inputMap = NbtMap.Load(opts.InputMap);
             var outputMap = NbtMap.Load(opts.OutputMap);
@@ -90,10 +90,7 @@ namespace TranslateSchematic
                     oldId = (short) (((addBlocks[index >> 1] & 0xF0) << 4) + (bLower[index] & 0xFF));
 
                 if (!TranslateId(oldId, inputMap, outputMap, out var newId))
-                {
-                    var position = GetPosition(index, tag["Length"].ToTagShort().Data, tag["Width"].ToTagShort().Data);
-                    failed.Add($"#{oldId} at {position.Item1},{position.Item2},{position.Item3}");
-                }
+                    failed.Add(oldId);
 
                 bLower[index] = (byte)(newId & 0xFF);
                 addBlocks[index >> 1] = (byte)(((index & 1) == 1) ?
@@ -101,7 +98,6 @@ namespace TranslateSchematic
                     : addBlocks[index >> 1] & 0xF | ((newId >> 8) & 0xF) << 4);
 
                 // Gui
-
                 lBlocksTotal.Value = index + 1;
                 lBlocksRemaining.Value = bLower.Length - index - 1;
                 lBlocksFailed.Value = failed.Count;
@@ -151,14 +147,6 @@ namespace TranslateSchematic
             var inputName = inputMap[oldId];
             result = outputMap.First(pair => pair.Value == inputName).Key;
             return true;
-        }
-
-        private static (int, int, int) GetPosition(int index, int length, int width)
-        {
-            var rX = index % length;
-            var rZ = ((index - rX) / width) % length;
-            var rY = (((index - rX) / width) - rZ) / length;
-            return (rX, rY, rZ);
         }
     }
 }
