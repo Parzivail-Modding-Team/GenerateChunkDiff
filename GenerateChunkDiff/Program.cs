@@ -23,7 +23,7 @@ namespace GenerateChunkDiff
         [Value(3, MetaName = "output", HelpText = "Output diff file")]
         public string DiffOutput { get; set; }
 
-        [Option('b', "bounds", HelpText = "Chunk boundaries (format: \"xmin:xmax:zmin:zmax\")")]
+        [Option('b', "bounds", HelpText = "Coordinate boundaries (format: \"minX:minY:minZ:maxX:maxY:maxZ\")")]
         public string ChunkBounds { get; set; }
     }
 
@@ -56,9 +56,9 @@ namespace GenerateChunkDiff
 
             var chunkBounds = new ChunkBounds(opts.ChunkBounds);
 
-            if (!chunkBounds.Success)
+            if (!chunkBounds.BoundsExist)
             {
-                Console.WriteLine("Input chunk bounds not in the correct format: \"xmin:xmax:zmin:zmax\"");
+                Console.WriteLine("Input bounds not in the correct format");
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace GenerateChunkDiff
 
                 pbChunks.Value = (float)i / manager.Count;
 
-                if (!donorManager.ChunkExists(chunk.X, chunk.Z) || !chunkBounds.Contains(chunk))
+                if (!donorManager.ChunkExists(chunk.X, chunk.Z) || !chunkBounds.CoarseContains(chunk))
                 {
                     skipped++;
                     continue;
@@ -130,6 +130,9 @@ namespace GenerateChunkDiff
                     {
                         for (var z = 0; z < 16; z++)
                         {
+                            if (!chunkBounds.Contains(chunk.X * 16 + x, y, chunk.Z * 16 + z))
+                                continue;
+
                             var blockId = (short)chunk.Blocks.GetID(x, y, z);
                             var blockData = chunk.Blocks.GetData(x, y, z);
                             NbtTree nbt = null;
