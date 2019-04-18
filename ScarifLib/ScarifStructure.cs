@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -74,8 +75,7 @@ namespace ScarifLib
 
         public static ScarifStructure Load(string filename)
         {
-            // TODO
-            return new ScarifStructure();
+            throw new NotImplementedException();
         }
 
         public void Add(ChunkPosition chunk, BlockPosition pos, BlockDiff block)

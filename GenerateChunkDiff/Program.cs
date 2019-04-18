@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using CommandLine;
@@ -9,7 +10,8 @@ using Substrate.Nbt;
 
 namespace GenerateChunkDiff
 {
-    internal class CliOptions
+    [Verb("generate", HelpText = "Generate a SCRF from a world file")]
+    internal class GenerateOptions
     {
         [Value(0, MetaName = "original", HelpText = "Unmodified world for comparison")]
         public string OriginalPath { get; set; }
@@ -27,22 +29,44 @@ namespace GenerateChunkDiff
         public string ChunkBounds { get; set; }
     }
 
+    [Verb("convert", HelpText = "Generate a SCRF from a world file")]
+    internal class ConvertOptions
+    {
+        [Value(0, MetaName = "input", HelpText = "Input diff file")]
+        public string Input { get; set; }
+
+        [Value(1, MetaName = "transformer", HelpText = "Lookup table used to transform block IDs")]
+        public string Transformer { get; set; }
+
+        [Value(2, MetaName = "output", HelpText = "Output diff file")]
+        public string Output { get; set; }
+    }
+
     internal class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            Parser.Default.ParseArguments<CliOptions>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
-                .WithNotParsed(HandleParseError);
+            return Parser.Default.ParseArguments<GenerateOptions, ConvertOptions>(args)
+                    .MapResult(
+                        (GenerateOptions opts) =>
+                        {
+                            GenerateScrf(opts);
+                            return 0;
+                        },
+                        (ConvertOptions opts) =>
+                        {
+                            ConvertScrf(opts);
+                            return 0;
+                        },
+                        errs => 1);
         }
 
-        private static void HandleParseError(IEnumerable<Error> errs)
+        private static void ConvertScrf(ConvertOptions opts)
         {
-            foreach (var error in errs)
-                Console.WriteLine($"Error: {error.Tag}");
+            var scrf = ScarifStructure.Load(opts.Input);
         }
 
-        private static void RunOptionsAndReturnExitCode(CliOptions opts)
+        private static void GenerateScrf(GenerateOptions opts)
         {
             var world = AnvilWorld.Open(opts.WorldPath);
             var donorWorld = AnvilWorld.Open(opts.OriginalPath);
