@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateChunkDiff", "GenerateChunkDiff\GenerateChunkDiff.csproj", "{3A51821E-23F8-4BB9-80C0-DF1DBABACB14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScarifUtil", "ScarifUtil\ScarifUtil.csproj", "{3A51821E-23F8-4BB9-80C0-DF1DBABACB14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScarifLib", "ScarifLib\ScarifLib.csproj", "{7E6E6A1D-A89E-4FB3-9D1C-897B95F1FA90}"
 EndProject

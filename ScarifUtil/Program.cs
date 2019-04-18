@@ -8,7 +8,7 @@ using ScarifLib;
 using Substrate;
 using Substrate.Nbt;
 
-namespace GenerateChunkDiff
+namespace ScarifUtil
 {
     [Verb("generate", HelpText = "Generate a SCRF from a world file")]
     internal class GenerateOptions
