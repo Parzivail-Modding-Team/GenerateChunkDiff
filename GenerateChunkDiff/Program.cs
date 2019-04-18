@@ -64,6 +64,38 @@ namespace GenerateChunkDiff
         private static void ConvertScrf(ConvertOptions opts)
         {
             var scrf = ScarifStructure.Load(opts.Input);
+            var transformer = LoadTransformer(opts.Transformer);
+
+            var newMapping = scrf.BlockTranslationMap.Clone();
+            foreach (var pair in scrf.BlockTranslationMap)
+            {
+                if (transformer.ContainsKey(pair.Value))
+                    newMapping[pair.Key] = transformer[pair.Value];
+            }
+
+            scrf.BlockTranslationMap = newMapping;
+
+            scrf.Save(opts.Output);
+        }
+
+        private static Dictionary<string, string> LoadTransformer(string filename)
+        {
+            var dict = new Dictionary<string, string>();
+            using(var reader = new StreamReader(filename))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (line == null) continue;
+
+                    var values = line.Split(',');
+                    if (values.Length != 2) continue;
+
+                    dict.Add(values[0], values[1]);
+                }
+            }
+
+            return dict;
         }
 
         private static void GenerateScrf(GenerateOptions opts)
@@ -86,7 +118,7 @@ namespace GenerateChunkDiff
                 return;
             }
 
-            var diff = new ScarifStructure();
+            var diff = new ScarifStructure(outputMap);
 
             Console.Clear();
             var cgui = new ConsoleGui();
@@ -181,7 +213,7 @@ namespace GenerateChunkDiff
                                 diffedTiles++;
 
                             diffedBlocks++;
-                            diff.Add(pos, new BlockPosition(x, y, z), new BlockDiff(blockId, blockData, nbt));
+                            diff.Add(pos, new BlockPosition(x, y, z), new ScarifBlock(blockId, blockData, nbt));
                         }
                     }
                 }
@@ -204,7 +236,7 @@ namespace GenerateChunkDiff
             lStatus.Value = "Saving...";
             cgui.Render();
 
-            diff.Save(opts.DiffOutput, outputMap);
+            diff.Save(opts.DiffOutput);
 
             lStatus.Value = "Done. Press Enter.";
             cgui.Render();

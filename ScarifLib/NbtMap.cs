@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Substrate.Core;
 using Substrate.Nbt;
 
@@ -6,6 +7,15 @@ namespace ScarifLib
 {
     public class NbtMap : Dictionary<short, string>
     {
+        public NbtMap()
+        {
+        }
+
+        public NbtMap(Dictionary<short, string> nbtMap)
+        {
+            foreach (var pair in nbtMap) Add(pair.Key, pair.Value);
+        }
+
         public static NbtMap Load(string filename)
         {
             var map = new NbtMap();
@@ -29,6 +39,11 @@ namespace ScarifLib
 
                 return map;
             }
+        }
+
+        public NbtMap Clone()
+        {
+            return new NbtMap(this);
         }
     }
 }

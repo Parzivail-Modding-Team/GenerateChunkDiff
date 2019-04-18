@@ -1,6 +1,6 @@
 ﻿namespace ScarifLib
 {
-    public class BlockPosition
+    public struct BlockPosition
     {
         public int X { get; }
         public int Y { get; }

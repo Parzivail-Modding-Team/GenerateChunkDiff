@@ -3,7 +3,7 @@ using Substrate.Nbt;
 
 namespace ScarifLib
 {
-    public class BlockDiff
+    public struct ScarifBlock
     {
         public int Id { get; }
         public BlockFlags Flags { get; }
@@ -14,17 +14,17 @@ namespace ScarifLib
         public enum BlockFlags
         {
             None = 0,
-            HasMetadata = 0b1,
-            HasTileNbt = 0b10
+            Metadata = 0b1,
+            Nbt = 0b10
         }
 
-        public BlockDiff(int id, int metdata = 0, NbtTree tileData = null)
+        public ScarifBlock(int id, int metdata = 0, NbtTree tileData = null)
         {
             Id = id;
             Metadata = metdata;
             TileData = tileData;
-            Flags = (Metadata == 0 ? BlockFlags.None : BlockFlags.HasMetadata) |
-                    (TileData == null ? BlockFlags.None : BlockFlags.HasTileNbt);
+            Flags = (Metadata == 0 ? BlockFlags.None : BlockFlags.Metadata) |
+                    (TileData == null ? BlockFlags.None : BlockFlags.Nbt);
         }
     }
 }

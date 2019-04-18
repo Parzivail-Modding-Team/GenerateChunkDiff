@@ -44,10 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockDiff.cs" />
+    <Compile Include="BlockFlagsExtensions.cs" />
+    <Compile Include="ScarifBlock.cs" />
+    <Compile Include="BlockDiffEntry.cs" />
     <Compile Include="BlockPosition.cs" />
     <Compile Include="ChunkBounds.cs" />
     <Compile Include="ChunkPosition.cs" />
+    <Compile Include="DiffMap.cs" />
     <Compile Include="NbtMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScarifStructure.cs" />
