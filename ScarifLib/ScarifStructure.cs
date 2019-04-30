@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using Brotli;
 using Substrate.Core;
@@ -23,11 +24,29 @@ namespace ScarifLib
             BlockTranslationMap = blockTranslationMap;
         }
 
-        private ScarifStructure(int version, NbtMap idMap, DiffMap diffMap)
+        private ScarifStructure(int version, NbtMap idMap, DiffMap diffMap) : this(idMap)
         {
             Version = version;
-            BlockTranslationMap = idMap;
             BlockDiffMap = diffMap;
+        }
+
+        private void TrimMappings()
+        {
+            var keysToRemove = new List<short>();
+            foreach (var pair in BlockTranslationMap)
+            {
+                if (HasAnyBlocksWithId(pair.Key))
+                    continue;
+
+                keysToRemove.Add(pair.Key);
+            }
+
+            foreach (var key in keysToRemove) BlockTranslationMap.Remove(key);
+        }
+
+        private bool HasAnyBlocksWithId(short id)
+        {
+            return BlockDiffMap.Any(chunk => chunk.Value.Any(entry => id == entry.Diff.Id));
         }
 
         public void Save(string filename)
@@ -42,6 +61,8 @@ namespace ScarifLib
                 f.Write(Version);
                 f.Write(BlockDiffMap.Keys.Count); // Keys = Chunks
                 f.Write((int)BlockTranslationMap.Keys.Count);
+                
+                TrimMappings();
 
                 foreach (var pair in BlockTranslationMap)
                 {
@@ -128,7 +149,7 @@ namespace ScarifLib
                     {
                         // Format:
                         // 0x 0000 1111
-                        //    xxxx yyyy
+                        //    xxxx zzzz
                         var xz = s.ReadByte();
 
                         var x = (byte)((xz & 0xF0) >> 4);

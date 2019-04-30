@@ -29,7 +29,7 @@ namespace ScarifUtil
         public string ChunkBounds { get; set; }
     }
 
-    [Verb("convert", HelpText = "Generate a SCRF from a world file")]
+    [Verb("convert", HelpText = "Convert a SCRF file with a transformer")]
     internal class ConvertOptions
     {
         [Value(0, MetaName = "input", HelpText = "Input diff file")]
